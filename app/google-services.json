@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "960884460329",
+    "firebase_url": "https://trasify-68845.firebaseio.com",
+    "project_id": "trasify-68845",
+    "storage_bucket": "trasify-68845.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:960884460329:android:d6d7b076c86071eb2e0538",
+        "android_client_info": {
+          "package_name": "com.wildanokt.trasify"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "960884460329-5l0u5f2mbhpesg9c8bsdbr2vpunosf41.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.wildanokt.trasify",
+            "certificate_hash": "82fd862d615a54c3b83eec57227567d86f4de653"
+          }
+        },
+        {
+          "client_id": "960884460329-lg0kdgcbee0f9ma00eb2hftl92san5ms.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCv_075RepdhOsdpJEJRjhg8-e0UNbMoGg"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "960884460329-lg0kdgcbee0f9ma00eb2hftl92san5ms.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
