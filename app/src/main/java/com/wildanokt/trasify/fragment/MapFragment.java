@@ -15,14 +15,17 @@ import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.model.BitmapDescriptor;
+import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.MarkerOptions;
 import com.wildanokt.trasify.R;
 
 /**
  * A simple {@link Fragment} subclass.
  */
-public class MapFragment extends Fragment {
+public class MapFragment extends Fragment implements OnMapReadyCallback{
 
 
     public MapFragment() {
@@ -40,60 +43,96 @@ public class MapFragment extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-
         SupportMapFragment mapFragment = (SupportMapFragment) getChildFragmentManager().findFragmentById(R.id.map);  //use SuppoprtMapFragment for using in fragment instead of activity  MapFragment = activity   SupportMapFragment = fragment
-        mapFragment.getMapAsync(new OnMapReadyCallback() {
-            @Override
-            public void onMapReady(GoogleMap mMap) {
-                mMap.setMapType(GoogleMap.MAP_TYPE_NORMAL);
+        mapFragment.getMapAsync(this);
 
-                mMap.clear(); //clear old markers
+//        mapFragment.getMapAsync(new OnMapReadyCallback() {
+//            @Override
+//            public void onMapReady(GoogleMap mMap) {
+//                mMap.setMapType(GoogleMap.MAP_TYPE_NORMAL);
+//
+//                mMap.clear(); //clear old markers
+//
+//                //set camera pos
+//                CameraPosition googlePlex = CameraPosition.builder()
+//                        .target(new LatLng(-7.952383, 112.614029))
+//                        .zoom(16)
+//                        .bearing(0)
+//                        .tilt(30)
+//                        .build();
+//
+//                //move camera
+//                mMap.animateCamera(CameraUpdateFactory.newCameraPosition(googlePlex), 10, null);
 
-                //set camera pos
-                CameraPosition googlePlex = CameraPosition.builder()
-                        .target(new LatLng(-7.952383, 112.614029))
-                        .zoom(16)
-                        .bearing(0)
-                        .tilt(30)
-                        .build();
-
-                //move camera
-                mMap.animateCamera(CameraUpdateFactory.newCameraPosition(googlePlex), 10, null);
-
-//                for (int i = 0; i < 2; i++) {
-//                    Trash trash = mTrashes.get(i);
-//                    mMap.addMarker(new MarkerOptions()
-//                            .position(new LatLng(trash.getLat(), trash.getLng()))
-//                            .title(trash.getLokasi())
-//                            .snippet("Organik : "+trash.getOrganik()+"%, Anorganik : "+trash.getAnorganik()+"%, Logam : "+trash.getLogam()+"%")
-//                    );
-//                }
 
 //                mMap.addMarker(new MarkerOptions()
 //                        .position(new LatLng(-7.953341, 112.614669))
 //                        .title("Lokasi A")
-//                        .snippet("Organik : 40%, Anorganik : 10%, Logam : 5%")
+//                        .icon(BitmapDescriptorFactory.fromResource(R.mipmap.ic_custom_pin))
 //                );
 //
 //                mMap.addMarker(new MarkerOptions()
 //                        .position(new LatLng(-7.951762, 112.616007))
 //                        .title("Lokasi B")
-//                        .snippet("Organik : 50%, Anorganik : 10%, Logam : 1%")
+//                        .icon(BitmapDescriptorFactory.fromResource(R.mipmap.ic_custom_pin))
 //                );
 //
 //                mMap.addMarker(new MarkerOptions()
 //                        .position(new LatLng(-7.950158, 112.613380))
 //                        .title("Lokasi C")
-//                        .snippet("Organik : 5%, Anorganik : 50%, Logam : 1%")
+//                        .icon(BitmapDescriptorFactory.fromResource(R.mipmap.ic_custom_pin))
 //                );
 //
 //                mMap.addMarker(new MarkerOptions()
 //                        .position(new LatLng(-7.952682, 112.611325))
 //                        .title("Lokasi D")
-//                        .snippet("Organik : 30%, Anorganik : 5%, Logam : 20%")
+//                        .icon(BitmapDescriptorFactory.fromResource(R.mipmap.ic_custom_pin))
 //                );
-            }
-        });
+//            }
+//        });
+
     }
 
+    @Override
+    public void onMapReady(GoogleMap mMap) {
+
+        mMap.setMapType(GoogleMap.MAP_TYPE_NORMAL);
+
+        mMap.clear(); //clear old markers
+
+        //set camera pos
+        CameraPosition googlePlex = CameraPosition.builder()
+                .target(new LatLng(-7.952383, 112.614029))
+                .zoom(16)
+                .bearing(0)
+                .tilt(30)
+                .build();
+
+        //move camera
+        mMap.animateCamera(CameraUpdateFactory.newCameraPosition(googlePlex), 10, null);
+
+        mMap.addMarker(new MarkerOptions()
+                .position(new LatLng(-7.953341, 112.614669))
+                .title("Lokasi A")
+                .icon(BitmapDescriptorFactory.fromResource(R.mipmap.ic_custom_pin))
+        );
+
+        mMap.addMarker(new MarkerOptions()
+                .position(new LatLng(-7.951762, 112.616007))
+                .title("Lokasi B")
+                .icon(BitmapDescriptorFactory.fromResource(R.mipmap.ic_custom_pin))
+        );
+
+        mMap.addMarker(new MarkerOptions()
+                .position(new LatLng(-7.950158, 112.613380))
+                .title("Lokasi C")
+                .icon(BitmapDescriptorFactory.fromResource(R.mipmap.ic_custom_pin))
+        );
+
+        mMap.addMarker(new MarkerOptions()
+                .position(new LatLng(-7.952682, 112.611325))
+                .title("Lokasi D")
+                .icon(BitmapDescriptorFactory.fromResource(R.mipmap.ic_custom_pin))
+        );
+    }
 }

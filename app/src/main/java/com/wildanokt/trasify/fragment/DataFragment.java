@@ -1,10 +1,19 @@
 package com.wildanokt.trasify.fragment;
 
 
+import android.app.Notification;
+import android.app.NotificationChannel;
+import android.app.NotificationManager;
+import android.content.Context;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.os.Build;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.core.app.NotificationCompat;
+import androidx.core.app.NotificationManagerCompat;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -23,6 +32,7 @@ import com.google.firebase.database.ValueEventListener;
 import com.wildanokt.trasify.R;
 import com.wildanokt.trasify.adapter.TrashAdapter;
 import com.wildanokt.trasify.model.Trash;
+import com.wildanokt.trasify.notification.notificationItem;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -34,6 +44,14 @@ public class DataFragment extends Fragment {
 
     private RecyclerView rvTrash;
     private List<Trash> mTrashes;
+
+    private int idNotification = 0;
+    private final List<notificationItem> stackNotif = new ArrayList<>();
+
+    private static final CharSequence CHANNEL_NAME = "trasify channel";
+    private final static String GROUP_KEY_EMAILS = "group_key_emails";
+    private final static int NOTIFICATION_REQUEST_CODE = 200;
+    private static final int MAX_NOTIFICATION = 10;
 
     public DataFragment() {
         // Required empty public constructor
@@ -65,6 +83,15 @@ public class DataFragment extends Fragment {
                 for (DataSnapshot ds: dataSnapshot.getChildren()) {
                     Trash mTrash = ds.getValue(Trash.class);
                     mTrashes.add(mTrash);
+                    if(mTrash.getAnorganik() > 80){
+                        setNotification(mTrash.getLokasi(), "Sampah Anorganik penuh");
+                    }
+                    if(mTrash.getOrganik() > 80){
+                        setNotification(mTrash.getLokasi(), "Sampah Organik penuh");
+                    }
+                    if(mTrash.getLogam() > 80){
+                        setNotification(mTrash.getLokasi(), "Sampah logam penuh");
+                    }
                 }
                 TrashAdapter adapter = new TrashAdapter(getContext(), mTrashes);
                 rvTrash.setAdapter(adapter);
@@ -78,4 +105,65 @@ public class DataFragment extends Fragment {
         });
     }
 
+    private void setNotification(String title, String content){
+//        NotificationCompat.Builder builder = new NotificationCompat.Builder(getContext(), CHANNEL_ID)
+//                .setSmallIcon(R.mipmap.ic_logo)
+//                .setContentTitle(title)
+//                .setContentText(content)
+//                .setPriority(NotificationCompat.PRIORITY_DEFAULT);
+//        Notification notification = builder.build();
+//        NotificationManagerCompat notificationManagerCompat = NotificationManagerCompat.from(getContext());
+//        notificationManagerCompat.notify((int)Math.random()*200, notification);
+
+        stackNotif.add(new notificationItem(idNotification, title, content));
+        NotificationManager mNotificationManager = (NotificationManager) getContext().getSystemService(Context.NOTIFICATION_SERVICE);
+        Bitmap largeIcon = BitmapFactory.decodeResource(getResources(), R.mipmap.ic_logo);
+        NotificationCompat.Builder mBuilder;
+
+        String CHANNEL_ID = "channel_01";
+        if (idNotification < MAX_NOTIFICATION) {
+            mBuilder = new NotificationCompat.Builder(getContext(), CHANNEL_ID)
+                    .setContentTitle("Node " + stackNotif.get(idNotification).getTitle())
+                    .setContentText(stackNotif.get(idNotification).getMessage())
+                    .setSmallIcon(R.mipmap.ic_logo)
+                    .setLargeIcon(largeIcon)
+                    .setGroup(GROUP_KEY_EMAILS)
+                    .setAutoCancel(true);
+        } else {
+            NotificationCompat.InboxStyle inboxStyle = new NotificationCompat.InboxStyle()
+                    .addLine("Node " + stackNotif.get(idNotification).getTitle())
+                    .addLine("Node " + stackNotif.get(idNotification - 1).getTitle())
+                    .setBigContentTitle(idNotification + " new notification")
+                    .setSummaryText("mail@dicoding");
+            mBuilder = new NotificationCompat.Builder(getContext(), CHANNEL_ID)
+                    .setContentTitle(idNotification + " new emails")
+                    .setContentText("mail@dicoding.com")
+                    .setSmallIcon(R.mipmap.ic_logo)
+                    .setGroup(GROUP_KEY_EMAILS)
+                    .setGroupSummary(true)
+                    .setStyle(inboxStyle)
+                    .setAutoCancel(true);
+        }
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+
+            /* Create or update. */
+            NotificationChannel channel = new NotificationChannel(CHANNEL_ID,
+                    CHANNEL_NAME,
+                    NotificationManager.IMPORTANCE_DEFAULT);
+
+            mBuilder.setChannelId(CHANNEL_ID);
+
+            if (mNotificationManager != null) {
+                mNotificationManager.createNotificationChannel(channel);
+            }
+        }
+
+        Notification notification = mBuilder.build();
+
+        if (mNotificationManager != null) {
+            mNotificationManager.notify(idNotification, notification);
+        }
+        idNotification++;
+    }
 }
