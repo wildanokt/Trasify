@@ -22,6 +22,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import com.google.firebase.database.DataSnapshot;
@@ -43,6 +44,7 @@ import java.util.List;
 public class DataFragment extends Fragment {
 
     private RecyclerView rvTrash;
+    private ProgressBar pgLoad;
     private List<Trash> mTrashes;
 
     private int idNotification = 0;
@@ -62,12 +64,16 @@ public class DataFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_data, container, false);
+        View view = inflater.inflate(R.layout.fragment_data, container, false);
+        pgLoad = view.findViewById(R.id.pg_load);
+        pgLoad.setVisibility(View.VISIBLE);
+        return view;
     }
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+
         rvTrash = view.findViewById(R.id.rv_trash);
         rvTrash.setHasFixedSize(true);
 
@@ -95,6 +101,7 @@ public class DataFragment extends Fragment {
                 }
                 TrashAdapter adapter = new TrashAdapter(getContext(), mTrashes);
                 rvTrash.setAdapter(adapter);
+                pgLoad.setVisibility(View.GONE);
             }
 
             @Override
@@ -106,15 +113,6 @@ public class DataFragment extends Fragment {
     }
 
     private void setNotification(String title, String content){
-//        NotificationCompat.Builder builder = new NotificationCompat.Builder(getContext(), CHANNEL_ID)
-//                .setSmallIcon(R.mipmap.ic_logo)
-//                .setContentTitle(title)
-//                .setContentText(content)
-//                .setPriority(NotificationCompat.PRIORITY_DEFAULT);
-//        Notification notification = builder.build();
-//        NotificationManagerCompat notificationManagerCompat = NotificationManagerCompat.from(getContext());
-//        notificationManagerCompat.notify((int)Math.random()*200, notification);
-
         stackNotif.add(new notificationItem(idNotification, title, content));
         NotificationManager mNotificationManager = (NotificationManager) getContext().getSystemService(Context.NOTIFICATION_SERVICE);
         Bitmap largeIcon = BitmapFactory.decodeResource(getResources(), R.mipmap.ic_logo);
