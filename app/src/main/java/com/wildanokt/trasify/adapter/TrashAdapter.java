@@ -1,6 +1,7 @@
 package com.wildanokt.trasify.adapter;
 
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.PorterDuff;
 import android.graphics.drawable.Drawable;
@@ -10,13 +11,16 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ProgressBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.wildanokt.trasify.R;
+import com.wildanokt.trasify.activity.RouteActivity;
 import com.wildanokt.trasify.model.Trash;
 
+import java.io.Serializable;
 import java.util.List;
 
 public class TrashAdapter extends RecyclerView.Adapter<TrashAdapter.ListViewHolder> {
@@ -37,9 +41,10 @@ public class TrashAdapter extends RecyclerView.Adapter<TrashAdapter.ListViewHold
     }
 
     @Override
-    public void onBindViewHolder(@NonNull TrashAdapter.ListViewHolder holder, int position) {
-        Trash trash = trashes.get(position);
+    public void onBindViewHolder(@NonNull final TrashAdapter.ListViewHolder holder, int position) {
+        final Trash trash = trashes.get(position);
 
+        //anorganik
         int anorganik = (int)Math.round(trash.getAnorganik());
         LayerDrawable clAnorganik = (LayerDrawable) holder.pg_anorganik.getProgressDrawable();
         Drawable bgAnorganik = clAnorganik.getDrawable(0);
@@ -56,6 +61,7 @@ public class TrashAdapter extends RecyclerView.Adapter<TrashAdapter.ListViewHold
             holder.tv_warn_anor.setTextColor(Color.parseColor("#E84C3D"));
         }
 
+        //organik
         int organik = (int)Math.round(trash.getOrganik());
         LayerDrawable clOrganik = (LayerDrawable) holder.pg_organik.getProgressDrawable();
         Drawable bgOrganik = clOrganik.getDrawable(0);
@@ -72,6 +78,7 @@ public class TrashAdapter extends RecyclerView.Adapter<TrashAdapter.ListViewHold
             holder.tv_warn_or.setTextColor(Color.parseColor("#E84C3D"));
         }
 
+        //logam
         int logam = (int)Math.round(trash.getLogam());
         LayerDrawable clLogam = (LayerDrawable) holder.pg_logam.getProgressDrawable();
         Drawable bgLogam = clLogam.getDrawable(0);
@@ -96,6 +103,17 @@ public class TrashAdapter extends RecyclerView.Adapter<TrashAdapter.ListViewHold
         holder.tv_organik.setText(Integer.toString(organik)+"%");
         holder.pg_logam.setProgress(logam);
         holder.tv_logam.setText(Integer.toString(logam)+"%");
+
+        holder.itemView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(context, RouteActivity.class);
+                intent.putExtra("lat", trash.getLat());
+                intent.putExtra("lng", trash.getLng());
+                intent.putExtra("lokasi", trash.getLokasi());
+                context.startActivity(intent);
+            }
+        });
     }
 
     @Override

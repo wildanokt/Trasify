@@ -38,6 +38,7 @@ import com.wildanokt.trasify.R;
  * A simple {@link Fragment} subclass.
  */
 public class MapFragment extends Fragment implements OnMapReadyCallback,GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener, LocationListener {
+//public class MapFragment extends Fragment implements OnMapReadyCallback{
 
     GoogleMap mGoogleMap;
     LocationRequest mLocationRequest;
